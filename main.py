@@ -1,59 +1,58 @@
 import math
 import utime
-import picounicorn
+import picoscroll
 
-picounicorn.init()
+picoscroll.init()
 
 def pomocycle():
 
     # Set up our variables
-    r = 255
-    g = 0
-    column = 15
-    row = 6
+    width = picoscroll.get_width()
+    height = picoscroll.get_height()
+    column = width-1
+    row = height-1
     phase = "work"
-    multiplier = 134
+    workminutes = 25
+    restminutes = 5
+    multiplier = math.trunc(10*workminutes*60/width/height)
 
     # Start counting down
-    while not(picounicorn.is_pressed(picounicorn.BUTTON_Y)):
+    while not(picoscroll.is_pressed(picoscroll.BUTTON_Y)):
 
         # Illuminate every LED on the board
-        for x in range(16):
-            for y in range(7):
-                picounicorn.set_pixel(x, y, r, g, 0)
+        for x in range(width):
+            for y in range(height):
+                picoscroll.set_pixel(x, y, 64)
+        picoscroll.update()   
         
         # Extinguish LEDs one by one
         while row > -1:
             while column > -1:
                 for x in range(multiplier):
-                    if not(picounicorn.is_pressed(picounicorn.BUTTON_Y)):
+                    if not(picoscroll.is_pressed(picoscroll.BUTTON_Y)):
                            utime.sleep(0.1)
                     else:
                         break
-                picounicorn.set_pixel(column, row, 0, 0, 0)
+                picoscroll.set_pixel(column, row, 0)
+                picoscroll.update()
                 column -= 1
-            column = 15
+            column = width-1
             row -= 1
-        row = 6
+        row = height-1
         
         # No more LEDs? Switch from work to rest and vice versa
         if phase == "work":
             phase = "rest"
-            multiplier = 27
-            r = 0
-            g = 255
+            multiplier = math.trunc(10*restminutes*60/width/height)
         elif phase == "rest":
             phase = "work"
-            multiplier = 134
-            r = 255
-            g = 0
+            multiplier = math.trunc(10*workminutes*60/width/height)
         pass
 
     # Clear the display
-    for x in range(16):
-        for y in range(7):
-            picounicorn.set_pixel(x, y, 0, 0, 0)
+    picoscroll.clear()
+    picoscroll.update()
 
 while True:
-    while picounicorn.is_pressed(picounicorn.BUTTON_X):
+    while picoscroll.is_pressed(picoscroll.BUTTON_X):
         pomocycle()
