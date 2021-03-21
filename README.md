@@ -1,5 +1,5 @@
 # picopomodoroscroll
-A Pomodoro timer using Raspberry Pi Pico.
+A Pomodoro timer using Raspberry Pi Pico Scroll.
 
 The Pomodoro Technique was developed by Francesco Cirillo using a tomato-shaped kitchen timer (hence the name). It breaks down longer periods of work into 25 minute sessions, with a five minute rest between each one. Several smartphone apps replicate the timer experience.
 
